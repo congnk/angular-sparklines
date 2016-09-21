@@ -1,6 +1,6 @@
 {
   "name": "angular-sparklines",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Easy sparklines for Angular",
   "main": "dist/angular-sparklines.js",
   "scripts": {
@@ -11,7 +11,8 @@
     "sparkline"
   ],
   "authors": [
-    "Davis Marques <dmarq.ezz@gmail.com>"
+    "Davis Marques <dmarq.ezz@gmail.com>",
+	"Bryce xiong <xiongcong@chinacloud.com.cn>"
   ],
   "license": "MIT",
   "devDependencies": {
