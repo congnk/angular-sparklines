@@ -56,8 +56,8 @@ angular.module('sparklines').service('SparkUtils', function () {
         .attr('transform', function(d, i) { return 'translate(' + i * barWidth + ',0)'; });
     bar.append('rect')
         .attr('class', 'bar')
-        .attr('y', function(d) { return yScale(d); })
-        .attr('height', function(d) { return options.height - yScale(d); })
+        .attr('y', function(d) { return options.height - yScale(d); })
+        .attr('height', function(d) { return yScale(d); })
         .attr('width', barWidth - 1);
   };
 
