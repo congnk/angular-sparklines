@@ -57,7 +57,10 @@ angular.module('sparklines').service('SparkUtils', function () {
     bar.append('rect')
         .attr('class', 'bar')
         .attr('y', function(d) { return options.height - yScale(d); })
-        .attr('height', function(d) { return yScale(d); })
+        .attr('height', function(d) { 
+          var h = yScale(d); 
+          return h>0?h:0;
+        })
         .attr('width', barWidth - 1);
   };
 
@@ -159,7 +162,7 @@ angular.module('sparklines').service('SparkUtils', function () {
           return lastIndex;
         }
       }, 0);
-      console.dir('max ' + maxValueIndex);
+      
       dot.append('rect')
         .attr('class', function (d, i) { return i === maxValueIndex ? 'dot max' : 'hidden'; })
         .attr('y', function(d) { return yScale(d); })
@@ -174,7 +177,7 @@ angular.module('sparklines').service('SparkUtils', function () {
           return lastIndex;
         }
       }, Infinity);
-      console.dir('min ' + minValueIndex);
+      
       dot.append('rect')
         .attr('class', function (d, i) { return i === minValueIndex ? 'dot min' : 'hidden'; })
         .attr('y', function(d) { return yScale(d); })
