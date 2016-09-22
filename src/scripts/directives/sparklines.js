@@ -18,7 +18,7 @@ angular.module('sparklines').service('SparkUtils', function () {
    * @param {Object} options Chart configuration options
    */
   svc.areaChart = function (id, data, options) {
-    d3.select(id).html(""); //清空原有画图
+    d3.select(id).html(''); //清空原有画图
     // create the d3 SVG element
     var graph = d3.select(id).append('svg:svg').attr('width', options.width).attr('height', options.height);
     // X and Y scales
@@ -44,7 +44,7 @@ angular.module('sparklines').service('SparkUtils', function () {
    * @param {Object} options Chart configuration options
    */
   svc.barChart = function (id, data, options) {
-    d3.select(id).html(""); //清空原有画图
+    d3.select(id).html(''); //清空原有画图
     // create the d3 SVG element
     var graph = d3.select(id).append('svg:svg').attr('width', options.width).attr('height', options.height);
     // Y scale
@@ -73,7 +73,7 @@ angular.module('sparklines').service('SparkUtils', function () {
    * @param {Object} options Chart configuration options
    */
   svc.binaryChart = function (id, data, options) {
-    d3.select(id).html(""); //清空原有画图
+    d3.select(id).html(''); //清空原有画图
     // create the d3 SVG element
     var graph = d3.select(id).append('svg:svg').attr('width', options.width).attr('height', options.height);
     // Y scale
@@ -113,7 +113,7 @@ angular.module('sparklines').service('SparkUtils', function () {
    * @param {Object} options Chart configuration options
    */
   svc.lineChart = function (id, data, options) {
-    d3.select(id).html(""); //清空原有画图
+    d3.select(id).html(''); //清空原有画图
     // create the d3 SVG element
     var graph = d3.select(id).append('svg:svg').attr('width', options.width).attr('height', options.height);
     // X and Y scales
@@ -234,7 +234,7 @@ angular.module('sparklines').service('SparkUtils', function () {
  * @see http://bl.ocks.org/benjchristensen/1133472
  * @see http://bl.ocks.org/benjchristensen/1148374
  */
-angular.module('sparklines').directive('sparkline', ['SparkUtils', function(Sparklines) {
+angular.module('sparklines').directive('sparkline', ['SparkUtils','$timeout', function(Sparklines,$timeout) {
   return {
     restrict: 'E',
     scope: {
@@ -261,10 +261,10 @@ angular.module('sparklines').directive('sparkline', ['SparkUtils', function(Spar
         } else if (options.type === 'line') {
           Sparklines.lineChart(id, data, options);
         }
-      }
+      };
       init();
       $timeout(function() {
-        scope.$watch("data", function(newValue, oldValue) {
+        scope.$watch('data', function(newValue, oldValue) {
             if (newValue === oldValue) {
               return;
             }

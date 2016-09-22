@@ -18,6 +18,7 @@ angular.module('sparklines').service('SparkUtils', function () {
    * @param {Object} options Chart configuration options
    */
   svc.areaChart = function (id, data, options) {
+    d3.select(id).html(''); //清空原有画图
     // create the d3 SVG element
     var graph = d3.select(id).append('svg:svg').attr('width', options.width).attr('height', options.height);
     // X and Y scales
@@ -43,6 +44,7 @@ angular.module('sparklines').service('SparkUtils', function () {
    * @param {Object} options Chart configuration options
    */
   svc.barChart = function (id, data, options) {
+    d3.select(id).html(''); //清空原有画图
     // create the d3 SVG element
     var graph = d3.select(id).append('svg:svg').attr('width', options.width).attr('height', options.height);
     // Y scale
@@ -71,6 +73,7 @@ angular.module('sparklines').service('SparkUtils', function () {
    * @param {Object} options Chart configuration options
    */
   svc.binaryChart = function (id, data, options) {
+    d3.select(id).html(''); //清空原有画图
     // create the d3 SVG element
     var graph = d3.select(id).append('svg:svg').attr('width', options.width).attr('height', options.height);
     // Y scale
@@ -110,6 +113,7 @@ angular.module('sparklines').service('SparkUtils', function () {
    * @param {Object} options Chart configuration options
    */
   svc.lineChart = function (id, data, options) {
+    d3.select(id).html(''); //清空原有画图
     // create the d3 SVG element
     var graph = d3.select(id).append('svg:svg').attr('width', options.width).attr('height', options.height);
     // X and Y scales
@@ -230,7 +234,7 @@ angular.module('sparklines').service('SparkUtils', function () {
  * @see http://bl.ocks.org/benjchristensen/1133472
  * @see http://bl.ocks.org/benjchristensen/1148374
  */
-angular.module('sparklines').directive('sparkline', ['SparkUtils', function(Sparklines) {
+angular.module('sparklines').directive('sparkline', ['SparkUtils','$timeout', function(Sparklines,$timeout) {
   return {
     restrict: 'E',
     scope: {
@@ -238,23 +242,36 @@ angular.module('sparklines').directive('sparkline', ['SparkUtils', function(Spar
       options: '='
     },
     link: function (scope, element) {
-      var data, id, options;
-      // chart element identifier
-      element[0].id = element[0].id ? element[0].id : 'sparkline-' + Sparklines.randomString(5);
-      id = '#' + element[0].id;
-      // chart data and configuration options
-      data = scope.test ? Sparklines.randomNumbers(20, 100) : scope.data || [];
-      options = scope.options ? Sparklines.mergeOptions(Sparklines.defaultOptions, scope.options) : Sparklines.defaultOptions;
-      // build the chart
-      if (options.type === 'area') {
-        Sparklines.areaChart(id, data, options);
-      } else if (options.type === 'bar') {
-        Sparklines.barChart(id, data, options);
-      } else if (options.type === 'binary') {
-        Sparklines.binaryChart(id, data, options);
-      } else if (options.type === 'line') {
-        Sparklines.lineChart(id, data, options);
-      }
+      var init = function(){
+        var data, id, options;
+        // chart element identifier
+        element[0].id = element[0].id ? element[0].id : 'sparkline-' + Sparklines.randomString(5);
+        id = '#' + element[0].id;
+        // chart data and configuration options
+        data = scope.test ? Sparklines.randomNumbers(20, 100) : scope.data || [];
+        options = scope.options ? Sparklines.mergeOptions(Sparklines.defaultOptions, scope.options) : Sparklines.defaultOptions;
+
+        // build the chart
+        if (options.type === 'area') {
+          Sparklines.areaChart(id, data, options);
+        } else if (options.type === 'bar') {
+          Sparklines.barChart(id, data, options);
+        } else if (options.type === 'binary') {
+          Sparklines.binaryChart(id, data, options);
+        } else if (options.type === 'line') {
+          Sparklines.lineChart(id, data, options);
+        }
+      };
+      init();
+      $timeout(function() {
+        scope.$watch('data', function(newValue, oldValue) {
+            if (newValue === oldValue) {
+              return;
+            }
+            return init();
+          }, true);
+      });
+
     }
   };
 }]);
